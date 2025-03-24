@@ -10,6 +10,7 @@
 <script src="LNV_X90_IDP_Pro5_160x600.js"></script>
 
 <script>
+    // ✅ Gắn link clickTag theo chuẩn GDN
     window.clickTag = "https://www.lenovo.com/sg/en/";
 
     var canvas, stage, exportRoot, anim_container, dom_overlay_container, fnStartAnimation;
@@ -29,7 +30,7 @@
 
     function handleFileLoad(evt, comp) {
         var images = comp.getImages();
-        if (evt && (evt.item.type === "image")) {
+        if (evt && evt.item.type === "image") {
             images[evt.item.id] = evt.result;
         }
     }
@@ -61,21 +62,21 @@
         AdobeAn.compositionLoaded(lib.properties.id);
         fnStartAnimation();
 
-        // 🎯 Click vào banner mở URL, nhưng không ảnh hưởng nút Replay
-        anim_container.addEventListener("click", function(evt) {
+        // ✅ Click vào banner sẽ mở clickTag (ngoại trừ nút Replay)
+        canvas.addEventListener("click", function(evt) {
             if (!exportRoot.btn_replay || evt.target !== exportRoot.btn_replay) {
                 window.open(window.clickTag, "_blank");
             }
         });
 
-        // 🎯 Gán sự kiện cho nút Replay khi đã tải xong
+        // ✅ Gán sự kiện cho nút Replay khi đã tải xong
         stage.on("tick", function() {
             if (exportRoot.btn_replay && !exportRoot.btn_replay._hasEventListener) {
                 exportRoot.btn_replay.cursor = "pointer";
                 exportRoot.btn_replay.mouseEnabled = true;
                 exportRoot.btn_replay._hasEventListener = true; // Ngăn chặn gán nhiều lần
                 exportRoot.btn_replay.addEventListener("click", function(evt) {
-                    evt.stopPropagation();
+                    evt.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài
                     evt.preventDefault();
                     exportRoot.gotoAndPlay(0);
                 });
